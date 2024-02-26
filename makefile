@@ -1,6 +1,6 @@
 #***************************************************************************
-#*   Autoversion makefile                  v.20210511.233948    (pdflatex) *
-#*   Copyright (C) 2014-2021 by Ruben Carlo Benante <rcb@beco.cc>          *
+#*   Autoversion makefile                     v.20240214.092428 (FORTIFY2) *
+#*   Copyright (C) 2014-2024 by Ruben Carlo Benante <rcb@beco.cc>          *
 #*                                                                         *
 #*   This makefile sets BUILD and allows to set MAJOR.MINOR version,       *
 #*   DEBUG and OBJ to compile a range of different targets                 *
@@ -38,74 +38,95 @@
 # Examples:
 #
 # * From linux prompt:
-#    - Normal C program (ex1.c)
-#        $ make ex1.x
-#    - Aspipo program (ex1.c) with object:
-#        $ make ex1.x OBJ=libaspipo-ux64.o
-#    - Multiple objects:
-#        $ make ex1.x OBJ="mylib1.o mylib2.o"
-#    - Multiple sources to generate a single binary ex1.x:
-#    	 $ make ex1.x SRC="mysrc1.c mysrc2.c"
-#	 - Normal C program (ex2.c) version 2.3, no debug
-#	 	 $ make ex2.x MAJOR=2 MINOR=3 DEBUG=0
-#	 - Travis test
-#	 	 $ make -e travis SCR=mysrc.c
-#	 - Brainforce:
-#	     $ make ex1.bf.x
-#	 - Portugol:
-#	 	 $ make ex1.gpt.x
-#	 	 creates ex1.gpt.c and ex1.gpt.x
-#	 - Project Euler:
-#	     + Create a new template, say, number pe42.c:
-#	         $ make pe42.c
-#	     + Compile pe42.c with:
-#		     $ make pe42.x SRC="projecteuler.c myeulerlib.c"
-# 	 - LaTeX
-# 	     + Create an article.tex and a biblio.bib
-# 	         $ make article.tex BIB="biblio"
+#	- Normal C program (ex1.c)
+#		$ make ex1.x
+#	- Normal CPP program (ex1.cpp)
+#		$ make ex1.out
+#	- Aspipo program (ex1.c) with object:
+#		$ make ex1.x OBJ=libaspipo-ux64.o
+#	- Multiple objects:
+#		$ make ex1.x OBJ="mylib1.o mylib2.o"
+#	- Multiple sources to generate a single binary ex1.x:
+#		$ make ex1.x SRC="mysrc1.c mysrc2.c"
+#	- Normal C program (ex2.c) version 2.3, no debug
+#		$ make ex2.x MAJOR=2 MINOR=3 DEBUG=0
+#	- Travis test
+#		$ make -e travis SCR=mysrc.c
+#	- Brainforce:
+#		$ make ex1.bf.x
+#	- Portugol:
+#		+ Creates ex1.gpt.c and ex1.gpt.x
+#			$ make ex1.gpt.x
+#	- Project Euler:
+#		+ Create a new template, say, number pe42.c:
+#			$ make pe42.c
+#		+ Compile pe42.c with:
+#			$ make pe42.x SRC="projecteuler.c myeulerlib.c"
+#	- LaTeX
+#		+ Create an article.tex and a biblio.bib
+#			$ make article.tex BIB="biblio"
+#	- TAGS
+#		+ Create a <tags> file with
+#			$ make tags
+#
 #
 # * Directly from vim editor command line:
-#    - Normal C program (ex1.c)
-#        :make ex1.x
-#    - Aspipo program (ex1.c)
-#        :make ex1.x OBJ=libaspipo-ux64.o
+#	- Normal C program (ex1.c)
+#		:make ex1.x
+#	- Aspipo program (ex1.c)
+#		:make ex1.x OBJ=libaspipo-ux64.o
 #
 # * Copy from 'rascunhos' to 'trabalhos'
-# 	- $ make copy PRG=ex1
-# 	It will try to copy every file matching patterns:
+#	- $ make copy PRG=ex1
+#	It will try to copy every file matching patterns:
 #		cp ex1.c 		# c source code
 #		cp ex1.h 		# c library source code
-# 		cp ex1.x 		# binary from c source code
-# 		cp ex1.gpt 		# portugol source code
-# 		cp ex1.gpt.c	# portugol translated to C source code
-# 		cp ex1.gpt.x 	# binary from portugol source code
-# 		cp ex1.bf 		# brainforce source code
-# 		cp ex1.bf.x 	# binary from brainforce source code
-# 		cp ex1.cpl.x 	# binary from c code with some prolog predicates linked to it
-# 		cp ex1.pl 		# prolog source code
-# 		cp ex1.pl.x 	# binary from prolog source code
-# 		cp ex1.so 		# shared library object from c source code
-# 		cp ex1.pl.so 	# c library object with some functions that may be called by a prolog program
-# 	to the '../trabalhos' folder
+#		cp ex1.x 		# binary from c source code
+#		cp ex1.cpp  	# C++ source code
+#		cp ex1.hpp  	# C++ library source code
+#		cp ex1.out 		# binary from C++ source code
+#		cp ex1.gpt 		# portugol source code
+#		cp ex1.gpt.c	# portugol translated to C source code
+#		cp ex1.gpt.x 	# binary from portugol source code
+#		cp ex1.bf 		# brainforce source code
+#		cp ex1.bf.x 	# binary from brainforce source code
+#		cp ex1.cpl.x 	# binary from c code with some prolog predicates linked to it
+#		cp ex1.pl 		# prolog source code
+#		cp ex1.pl.x 	# binary from prolog source code
+#		cp ex1.so 		# shared library object from c source code
+#		cp ex1.pl.so 	# c library object with some functions that may be called by a prolog program to the '../trabalhos' folder
+#		cp ex1.pdf 		# PDF article
+#		cp ex1.tex 		# TEX source code for PDF article
 #
 # * CTAGS
-# 	 - Generate a 'tags' index file with all tags in all C source codes
-# 	 	$ make tags
-# 	 - Use with vi:
-# 	 	:make tags
-# 	 	- To find a function or other tag, use $ vim -t tag
-# 	 	- Inside vi, use :ta tag
-#
+#	- Generate a 'tags' index file with all tags in all C source codes
+#		$ make tags
+#	- Use with vi:
+#		:make tags
+#	- To find a function or other tag, use $ vim -t tag
+#	- Inside vi, use :ta tag
 #
 # * clean
-#   Clean temporary files *.o and errors.err
-#   	$ make clean
+#	Clean temporary files *.o and errors.err
+#		$ make clean
 #
-# * wipe 
+# * wipe
 #	- WARNING!! Clean all created files: *.x *.so *.o errors.err and tags
-# 		$ make wipe
+#		$ make wipe
 #
 # Log:
+# 2024-02-14:
+# 		* Debug com -Og
+# 		* Padrao gnu17 e gnu++17
+# 		* FORTIFY 2
+# 		* copy files added: cpp, hpp, pdf, tex, tags
+# 2022-10-20:
+# 		* -Wl,-no-as-needed : gcc command cite libraries in any order
+# 		* -Wno-unused : stop complaining about unused return from scanf and alike
+# 2022-09-15:
+# 		* Allegro in LDLIBS `allegro-config --cflags --libs`
+# 2022-02-12:
+# 		* syntax highlight TAB (set list)
 # 2021-05-11:
 # 		* pdflatex article.tex -o article.pdf
 # 		* bibtex biblio
@@ -133,14 +154,21 @@
 # 		* added _FORTIFY_SOURCE=1 to help catch overflows
 # 2017-03-05:
 # 		* added variable CCCOLOR to work with vi
-# 			- set makeprg=make\ o=%< CCCOLOR=never\ $* 
+# 			- set makeprg=make\ o=%< CCCOLOR=never\ $*
 # 			- set makeprg=make\ %<.x CCCOLOR=never\ $*
 # 			- set makeprg=make\ CCCOLOR=never\ $*
 #		* added CPPFLAGS += -D$(D) so we can pass values to
 #			C-Pre-processor via make prog.x D=VARIABLE=VALUE
+# 2017-03-06:
+# 		* ifeq "$(DEBUG)" "1" to set CFLAGS
+# 		* added _XOPEN_SOURCE=700 to pair with -ansi
+# 		* added _FORTIFY_SOURCE=1 to help catch overflows
 # 2017-03-03:
 # 		* added -fdiagnostics-color=always to colorize tee output
 # 		* added -pg -fprofile-arcs to allow gprof command on debug
+#
+# TODO:
+#		* Compile QT5
 
 # disable builtin rules with MAKEFLAGS and .SUFFIXES
 MAKEFLAGS += --no-builtin-rules
@@ -151,7 +179,7 @@ MAKEFLAGS += --no-builtin-rules
 SHELL=/bin/bash -o pipefail
 
 # asure functions that return values are not ignored
-FORTIFY ?= 1
+FORTIFY ?= 2
 # turn on/off debug mode
 DEBUG ?= 1
 # version major number
@@ -175,8 +203,11 @@ BUILD = $(shell date +"%g%m%d.%H%M%S")
 DEFSYM = $(subst .,_,$(BUILD))
 # automatic version number
 VERSION = "\"$(MAJOR).$(MINOR).$(BUILD)\""
+
 # c compiler
 CC = gcc
+# c++ compiler
+PPCC = g++
 # brainforce compiler
 BF = bf
 # gportugol compiler
@@ -185,29 +216,49 @@ PT = gpt
 PLLD = swipl-ld
 # prolog compiler
 PL = swipl
+
 # c flags for the c compiler
-CFLAGS = -Wall -Wextra -std=gnu99 -fdiagnostics-color=$(CCCOLOR)
+CFLAGS = -Wall -Wextra -Wno-unused-result -fdiagnostics-color=$(CCCOLOR) -std=gnu17
 #CFLAGS = -Wall -Wextra -g -O0 -std=gnu99 -pg -fprofile-arcs -fdiagnostics-color=$(CCCOLOR)
 ifeq "$(DEBUG)" "0"
 # not a debug, go fast
 CFLAGS += -Ofast
 else ifeq "$(DEBUG)" "1"
 # it is a debug, add symbols and no optimizations
-CFLAGS += -g -O0
+CFLAGS += -g -Og
 else
 # exaustive debug
-CFLAGS += -g -O0 -pg -fprofile-arcs -ansi -Wpedantic
+CFLAGS += -g -Og -pg -fprofile-arcs -Wpedantic
 endif
 #-pedantic-errors -Werror
 #-Ofast -c
-# pre-processor flags
+
+# PPCFLAGS C++ Flags for the CPP compiler
+PPCFLAGS = -Wall -Wextra -fdiagnostics-color=$(CCCOLOR) -std=gnu++17
+#CFLAGS = -Wall -Wextra -g -O0 -std=gnu99 -pg -fprofile-arcs -fdiagnostics-color=$(CCCOLOR)
+ifeq "$(DEBUG)" "0"
+# not a debug, go fast
+PPCFLAGS += -Ofast
+else ifeq "$(DEBUG)" "1"
+# it is a debug, add symbols and no optimizations
+PPCFLAGS += -g -Og
+else
+# exaustive debug
+PPCFLAGS += -g -Og
+endif
+
+# c and c++ pre-processor flags
 CPPFLAGS = -DVERSION=$(VERSION) -DBUILD="\"$(BUILD)\"" -DDEBUG=$(DEBUG) -D$(D) -D_FORTIFY_SOURCE=$(FORTIFY)
 ifeq "$(DEBUG)" "2"
 # POSIX extra stuff
 CPPFLAGS += -D_XOPEN_SOURCE=700
 endif
-# libraries to link, options to the linker
-LDLIBS = -Wl,--defsym,BUILD_$(DEFSYM)=0 -lm -lpthread -lncurses -lcurl -lgmp
+
+# libraries to link, options to the linker, including allegro. no-as-needed: any order is fine
+LDLIBS = -Wl,-no-as-needed -Wl,--defsym,BUILD_$(DEFSYM)=0 -lm -lpthread -lncurses -lcurl `allegro-config --cflags --libs`
+# CPP libraries to link, options to the linker
+PPLDLIBS = -Wl,-no-as-needed -Wl,--defsym,BUILD_$(DEFSYM)=0 -lm -lpthread -lncurses -lcurl
+
 # making a shared library
 CCSHARED = -shared -fPIC
 # brainforce options
@@ -218,16 +269,16 @@ PLLDSHARED = -shared
 PLFLAGS = --goal=main --stand_alone=true
 
 # Travis C: flags for the c compiler
-TCFLAGS = -Wall -Wextra -std=gnu99 -Werror
+TCFLAGS = -Wall -Wextra -Werror -std=gnu17
 ifeq "$(DEBUG)" "0"
 # not a debug, go fast
 TCFLAGS += -Ofast
 else ifeq "$(DEBUG)" "1"
 # it is a debug, add symbols and no optimizations
-TCFLAGS += -g -O0
+TCFLAGS += -g -Og
 else
 # exaustive debug
-TCFLAGS += -g -O0 -pg -fprofile-arcs -ansi -Wpedantic
+TCFLAGS += -g -Og -pg -fprofile-arcs -Wpedantic
 endif
 # travis for C: pre-processor flags
 TCPPFLAGS = -DVERSION=$(VERSION) -DBUILD="\"$(BUILD)\"" -DDEBUG=$(DEBUG) -D$(D) -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=$(FORTIFY)
@@ -236,22 +287,27 @@ ifeq "$(DEBUG)" "2"
 TCPPFLAGS += -D_XOPEN_SOURCE=700
 endif
 # travis for C: libraries to link, options to the linker
-TLDLIBS = -Wl,--defsym,BUILD_$(DEFSYM)=0 -lm -lpthread -lncurses -lcurl -lgmp
+TLDLIBS = -Wl,-no-as-needed -Wl,--defsym,BUILD_$(DEFSYM)=0 -lm -lpthread -lncurses -lcurl
 # travis for C: making a shared library
 TCCSHARED = -shared -fPIC
 
 # prevent built-in rules for %.o
 %.o : %.c
 
+# prevent built-in rules for %.o
+%.o : %.cpp
+
 # Programa BrainForce.
 %.bf.x : %.bf
 	$(BF) $^ -o $@ $(BFFLAGS) 2>&1 | tee errors.err
 
-# Algoritmo em PORTUGOL.
-%.gpt.x : %.gpt
-# %.gpt.c : %.gpt
-	$(PT) $^ -t $<.c 2>&1 | tee errors.err
-	$(CC) $(CFLAGS) $(CPPFLAGS) $^.c -o $@ 2>&1 | tee errors.err
+# Algoritmo em PORTUGOL: de C para Binario
+%.gpt.x : %.gpt.c %.gpt
+	$(CC) $(CFLAGS) $(CPPFLAGS) $< -o $@
+
+# Algoritmo em PORTUGOL: de GPT para C
+%.gpt.c : %.gpt
+	$(PT) $^ -t $@ 2>&1 | tee errors.err
 
 # Compila um programa em PROLOG para binario individual.
 %.pl.x : %.pl $(SRC)
@@ -287,8 +343,18 @@ endif
 	-@[ ! -s errors.err ] && echo "$@ version "$(VERSION) > VERSION && cp VERSION BUILD || echo "$@ build "$(VERSION) > BUILD
 
 # override built-in rules for mathing everything (exactly the same rule as %.x above)
-% : %.c $(OBJ) $(SRC)
-	-$(CC) $(CFLAGS) $(CPPFLAGS) $(LDLIBS) $^ -o $@ 2>&1 | tee errors.err
+#% : %.c $(OBJ) $(SRC)
+#	-$(CC) $(CFLAGS) $(CPPFLAGS) $(LDLIBS) $^ -o $@ 2>&1 | tee errors.err
+#	@#@echo $@ version $(VERSION) > VERSION
+#ifeq "$(CCCOLOR)" "always"
+#	@sed -i -r "s/\x1B\[(([0-9]+)(;[0-9]+)*)?[m,K,H,f,J]//g" errors.err
+#endif
+#	-@[ ! -s errors.err ] && echo "$@ version "$(VERSION) > VERSION && cp VERSION BUILD || echo "$@ build "$(VERSION) > BUILD
+
+# Programa em CPP
+# Inclui VERSION, data de BUILD e DEBUG (opcional).
+%.out : %.cpp $(OBJ) $(SRC)
+	-$(PPCC) $(PPCFLAGS) $(CPPFLAGS) $(PPLDLIBS) $^ -o $@ 2>&1 | tee errors.err
 	@#@echo $@ version $(VERSION) > VERSION
 ifeq "$(CCCOLOR)" "always"
 	@sed -i -r "s/\x1B\[(([0-9]+)(;[0-9]+)*)?[m,K,H,f,J]//g" errors.err
@@ -310,21 +376,26 @@ clean :
 	rm -f BUILD
 
 copy :
-	-cp $(PRG).c ../trabalhos 			# c source code
-	-cp $(PRG).h ../trabalhos 			# c library source code
-	-cp $(PRG).x ../trabalhos			# binary from c source code
-	-cp $(PRG).gpt ../trabalhos			# portugol source code
-	-cp $(PRG).gpt.c ../trabalhos		# portugol translated to C source code
-	-cp $(PRG).gpt.x ../trabalhos		# binary from portugol source code
-	-cp $(PRG).bf ../trabalhos			# brainforce source code
-	-cp $(PRG).bf.x ../trabalhos		# binary from brainforce source code
-	-cp $(PRG).cpl.x ../trabalhos		# binary from c code with some prolog predicates linked to it
-	-cp $(PRG).pl ../trabalhos			# prolog source code
-	-cp $(PRG).pl.x ../trabalhos		# binary from prolog source code
-	-cp $(PRG).so ../trabalhos			# shared library object from c source code
-	-cp $(PRG).pl.so ../trabalhos		# c library object with some functions that may be called by a prolog program
+	-cp $(PRG).c ../trabalhos 			# C source code
+	-cp $(PRG).h ../trabalhos 			# C library source code
+	-cp $(PRG).x ../trabalhos			# binary from C source code
+	-cp $(PRG).cpp ../trabalhos 		# C++ source code
+	-cp $(PRG).hpp ../trabalhos 		# C++ library source code
+	-cp $(PRG).out ../trabalhos			# binary from C++ source code
+	-cp $(PRG).gpt ../trabalhos			# Portugol source code
+	-cp $(PRG).gpt.c ../trabalhos		# Portugol translated to C source code
+	-cp $(PRG).gpt.x ../trabalhos		# binary from Portugol source code
+	-cp $(PRG).bf ../trabalhos			# Brainforce source code
+	-cp $(PRG).bf.x ../trabalhos		# binary from Brainforce source code
+	-cp $(PRG).cpl.x ../trabalhos		# binary from C code with some Prolog predicates linked to it
+	-cp $(PRG).pl ../trabalhos			# Prolog source code
+	-cp $(PRG).pl.x ../trabalhos		# binary from Prolog source code
+	-cp $(PRG).so ../trabalhos			# shared library object from C source code
+	-cp $(PRG).pl.so ../trabalhos		# C library object with some functions that may be called by a Prolog program
+	-cp $(PRG).pdf ../trabalhos			# PDF article
+	-cp $(PRG).tex ../trabalhos			# TEX source code for PDF article
 
-# Gera arquivo de indice tags com funcoes de todos fontes em C
+# Gera arquivo de indice <tags> com funcoes de todos fontes em C
 tags :
 	ctags -R
 	ctags -R -x | less -F
@@ -348,9 +419,9 @@ pe%.c :
 
 # Gera um artigo em PDF, com referencia bibliografica
 #       $ make article.tex BIB="biblio"
-# 		* pdflatex article.tex -o article.pdf
-# 		* bibtex biblio
-# 		* pdflatex article.tex -o article.pdf
+#   * pdflatex article.tex -o article.pdf
+#   * bibtex biblio
+#   * pdflatex article.tex -o article.pdf
 %.pdf : %.tex
 	@echo '.........: pdflatex running pass 1...'
 	pdflatex $< -o $@ #2>&1 | tee errors.err
@@ -364,6 +435,6 @@ pe%.c :
 
 #* ------------------------------------------------------------------- *
 #* makefile config for Vim modeline                                    *
-#* vi: set ai noet ts=4 sw=4 tw=0 wm=0 fo=croqlt :                     *
-#* Template by Dr. Beco <rcb at beco dot cc> Version 20170506.191339   *
+#* vi: set ai noet ts=4 sw=4 tw=0 wm=0 fo=croqlt list :                *
+#* Template by Dr. Beco <rcb at beco dot cc> Version 20220521.001405   *
 
