@@ -1,3 +1,4 @@
+
 % preambulo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[a4paper,10pt]{article} %twocolumn
 \usepackage[utf8]{inputenc} % letras acentuadas
@@ -5,18 +6,35 @@
 \usepackage{algorithm} % ambiente para índice de algoritmos
 \usepackage{algpseudocode} % fonte e estilo do algoritmo
 \usepackage{graphicx}
+\usepackage{url}
 % \usepackage{natbib}
-%[noend]
 
-\floatname{algorithm}{Algoritmo} % tradução da palavra algorítimo no ambiente de índice
+% comandos e definições %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\floatname{algorithm}{Algoritmo} % tradução da palavra algoritimo no índice
+
+\newcommand{\setfoot}[2]{%
+    \footnote{#2}
+    \newcounter{#1}%
+    \setcounter{#1}{\value{footnote}}%
+}
+
+\newcommand{\getfoot}[1]{%
+    \footnotemark[\value{#1}]%
+}
 
 % capa %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Comparando os algoritmos de ordenação}
-\author{Ruben Carlo Benante \\ Autor2 \\ Autor3}
+\title{Comparando os algoritmos de algo}
+
+\author{Benante, R. C.\setfoot{upe}{Universidade de Pernambuco}\\ rcb@upe.br \and
+Sobrenome2, A.\getfoot{upe}\\ email@poli.br\footnote{Autor para correspondência} \and
+Sobrenome3, A.\getfoot{upe}\\ email3@poli.br \and
+Sobrenome4, A. B.\getfoot{upe}\\ email4@poli.br}
 
 \begin{document}
 
 \maketitle
+
 
 % resumo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
@@ -36,6 +54,7 @@ Este é o fim do resumo.
 
 
 % artigo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % seção de introdução %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introdução ao métodos de ordenação}
 
@@ -146,7 +165,7 @@ Os resultados mostrados na tabela \ref{tab:resultados} demonstram ...
 % seção de conclusão %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusão do artigo}
 
-    Concluimos,com base nos estudos e testes coletados sobre os algoritmos de ordenação propostos, que para fins educacionais, o algoritmo \textit{BubbleSort} é mais indicado devido a sua simples implementação, cabendo então para o \textit{QuickSort} ser o mais indicado entre os dois, quando requer uma demanda em menor tempo e com mais eficiência.
+    Concluimos, com base nos estudos\footnote{a serem realizados}  e testes coletados sobre os algoritmos de ordenação propostos, que para fins educacionais, o algoritmo \textit{BubbleSort} é mais indicado devido a sua simples implementação, cabendo então para o \textit{QuickSort} ser o mais indicado entre os dois, quando requer uma demanda em menor tempo e com mais eficiência.
 
 De acordo com \cite{Benante2008phd}, este é o fim do artigo.
 
